@@ -6,4 +6,8 @@ node{
     stage('build the code using maven'){
         sh 'mvn clean install'
     }
+    stage('creating image from output'){
+        sh 'docker build -t pavankumarmalli/jenkins_cicd:new .'
+    }
+    
 }

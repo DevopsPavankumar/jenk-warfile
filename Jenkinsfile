@@ -11,7 +11,7 @@ node{
     }
     stage('pushing image to docker hub'){
        withCredentials([string(credentialsId: 'docker_cred', variable: 'mydockerhubcredentials')]) {
-        sh "docker login -u pavankumarmalli -p ${dockercred}"
+        sh "docker login -u pavankumarmalli -p ${docker_cred}"
     
     }
        

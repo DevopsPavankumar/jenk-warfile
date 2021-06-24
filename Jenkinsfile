@@ -10,11 +10,9 @@ node{
         sh 'docker build -t pavankumarmalli/jenkins_cicd:new .'
     }
     stage('pushing image to docker hub'){
-       withCredentials([string(credentialsId: 'dockerpwd', variable: 'mydockerhubcredentials')]) {
-        sh "docker login -u pavankumarmalli -p ${dockerpwd}"
-    
+       withCredentials([string(credentialsId: 'dockerwd', variable: 'dockerhubcredentials')]) {
+        sh "docker login -u pavankumarmalli -p ${dockerwd}"
     }
-       
        sh 'docker push pavankumarmalli/jenkins_cicd:new'
     }
 }

@@ -1,32 +1,18 @@
-pipeline {
-    agent any
-
-    stages {
-        stage ('Compile Stage') {
-
-            steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn clean compile'
-                }
-            }
-        }
-
-        stage ('Testing Stage') {
-
-            steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn test'
-                }
-            }
-        }
-
-
-        stage ('Deployment Stage') {
-            steps {
-                withMaven(maven : 'maven_3_5_0') {
-                    sh 'mvn deploy'
-                }
-            }
-        }
+node{
+    stage('i am pulling code from github'){
+        git credentialsId: 'ffb783d4-2e62-41a2-ac99-7c99d3e113bc', url: 'https://github.com/DevopsPavankumar/jenk-warfile.git'
+    }
+    
+    stage('build the code using maven'){
+        sh 'mvn clean install'
+    }
+    stage('creating image from output'){
+        sh 'docker build -t pavankumarmalli/jenkins_cicd:new .'
+    }
+    stage('pushing image to docker hub'){
+       withCredentials([string(credentialsId: 'dockerwd', variable: 'dockerhubcredentials')]) {
+        sh "docker login -u pavankumarmalli -p ${dockerhubcredentials}"
+    }
+       sh 'docker push pavankumarmalli/jenkins_cicd:new'
     }
 }
